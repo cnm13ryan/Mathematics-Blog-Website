@@ -1,3 +1,4 @@
+
 /* ########################################### */
 /*                 Global                      */
 /* ########################################### */
@@ -8,8 +9,8 @@
 html{
     font-size: 14px;
     font-family: 'Titillium Web', sans-serif;
-    background-color:#FEFEFE;
-    color:rgb(0,0,0);
+    background-color:rgb(0,0,0);
+    color:#FEFEFE;
 }
 
 a{
@@ -37,8 +38,7 @@ h1{
 }
 
 .subforum-title{
-	background-color: #4375bf;	
-    /* background-color:#292B2E; */
+    background-color:#292B2E;
     padding: 5px;
     border-radius: 5px;
     margin:4px;
@@ -53,8 +53,7 @@ h1{
     padding: 10px;
     margin:4px;
     border-radius: 5px;
-    /* background-color:#111314; */
-    background-color:#a96ded;
+    background-color:#111314;
 }
 
 .subforum-description *{
@@ -292,7 +291,7 @@ footer{
 .table-head div{
     padding: 5px;
     margin: 2px;
-    background-color: #bd35a4;
+    background-color: #2C2C2C;
     font-weight: bold;
 }
 
@@ -321,7 +320,7 @@ footer{
 .table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply{
     padding: 5px;
     margin: 2px;
-    background-color: #bd35b8;
+    background-color: #131415;
 }
 
 .table-row .status{
@@ -354,7 +353,7 @@ footer{
 }
 
 .navigate a:hover{
-    color:#963665;
+    color:#FF0042;
     font-weight: bolder;
 }
 
@@ -377,7 +376,7 @@ footer{
 }
 
 .note{
-    background-color:#369678;
+    background-color:#111314;
     padding: 20px;
     display: block;
 }
@@ -394,7 +393,7 @@ footer{
 
 .head{
     display: flex;
-    background-color: #369678;
+    background-color: #2C2C2C;
     padding: 5px;
     font-weight: bold;
     font-size: 15px;
@@ -410,7 +409,7 @@ footer{
 
 .body{
     display: flex;
-    background-color: #367963e;
+    background-color: #131415;
     padding: 10px;
     margin-top: 5px;
 }
