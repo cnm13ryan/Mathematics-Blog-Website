@@ -18,7 +18,7 @@ class Author(models.Model):
     bio = HTMLField()
     points = models.IntegerField(default=0)
     profile_pic = ResizedImageField(size=[50, 80], quality=100, 
-                                    upload_to="authors", default=None, 
+                                    upload_to="authors", default="authors/default.png", 
                                     null=True, blank=True)
 
     def __str__(self):

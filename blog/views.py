@@ -5,6 +5,7 @@ from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.exceptions import MultipleObjectsReturned
 
 
 def home(request):
@@ -28,31 +29,59 @@ def home(request):
     return render(request, "blog/forums.html", context)
 
 def detail(request, slug):
-    post = get_object_or_404(Post, slug=slug)
-    if request.user.is_authenticated:
-        author = Author.objects.filter(user=request.user)
+    try:
+        post = get_object_or_404(Post, slug=slug)
+        profile_pic_url = post.user.profile_pic.url if post.user.profile_pic and post.user.profile_pic.name else None  # Updated linek
     
-    if "comment-form" in request.POST:
-        comment = request.POST.get("comment")
-        new_comment, created = Comment.objects.get_or_create(user=author, content=comment)
-        post.comments.add(new_comment.id)
+        if request.user.is_authenticated:
+            try:
+                author = Author.objects.get(user=request.user)
+            except Author.DoesNotExist:
+                author = None  # or handle the exception in some other way 
+    
+        if "comment-form" in request.POST:
+            comment = request.POST.get("comment")
+            new_comment, created = Comment.objects.get_or_create(user=author, content=comment)
+            post.comments.add(new_comment.id)
 
-    if "reply-form" in request.POST:
-        reply = request.POST.get("reply")
-        commenr_id = request.POST.get("comment-id")
-        comment_obj = Comment.objects.get(id=commenr_id)
-        new_reply, created = Reply.objects.get_or_create(user=author, content=reply)
-        comment_obj.replies.add(new_reply.id)
+        if "reply-form" in request.POST:
+            reply = request.POST.get("reply")
+            commenr_id = request.POST.get("comment-id")
+            comment_obj = Comment.objects.get(id=commenr_id)
+            new_reply, created = Reply.objects.get_or_create(user=author, content=reply)
+            comment_obj.replies.add(new_reply.id)
 
 
-    context = {
-        "post":post,
-        "title": "MATH: "+post.title,
-    }
+        context = {
+            "post":post,
+            'profile_pic_url': profile_pic_url,
+            "title": "MATH: "+post.title,
+        }
 
-    update_views(request, post)
+        update_views(request, post)
 
-    return render(request, "blog/detail.html", context)
+        return render(request, "blog/detail.html", context)
+
+    except Post.DoesNotExist:
+        # handle the case where the post does not exist
+        return render(request, '404.html', status=404)
+
+    except MultipleObjectsReturned:
+        # handle the case where multiple posts are returned
+        posts = Post.objects.filter(slug=slug)
+        # Here you can decide what to do when multiple posts are returned.
+        # For example, you can return the first post:
+        post = posts.first()
+        profile_pic_url = post.user.profile_pic.url if post.user.profile_pic and post.user.profile_pic.name else None  # Updated line
+        context = {
+            "post":post,
+            'profile_pic_url': profile_pic_url,
+            "title": "MATH: "+post.title,
+        }
+
+        update_views(request, post)
+
+        return render(request, "blog/detail.html", context)
 
 def posts(request, slug):
     category = get_object_or_404(Category, slug=slug)
