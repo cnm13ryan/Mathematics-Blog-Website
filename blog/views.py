@@ -82,7 +82,7 @@ def create_post(request):
     if request.method == "POST":
         if form.is_valid():
             print("\n\n its valid")
-            author = Author.objects.get_or_create(user=request.user)
+            author, created = Author.objects.get_or_create(user=request.user)
             new_post = form.save(commit=False)
             new_post.user = author
             new_post.save()
